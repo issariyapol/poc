@@ -1,6 +1,5 @@
 package com.issa.poc.controller;
 
-import com.issa.poc.repository.CustomerRepository;
 import com.issa.poc.security.JwtUtil;
 import com.issa.poc.security.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
