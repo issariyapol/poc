@@ -1,8 +1,6 @@
 package com.issa.poc.msg;
 
 import com.issa.poc.model.Account;
-import com.issa.poc.exception.CustomerNotFoundException;
-import com.issa.poc.exception.AccountInvalidCustomerNameException;
 
 public class AcctOkResMsg extends BaseResMsg {
 

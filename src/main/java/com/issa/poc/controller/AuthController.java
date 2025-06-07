@@ -1,6 +1,5 @@
 package com.issa.poc.controller;
 
-import com.issa.poc.model.Customer;
 import com.issa.poc.repository.CustomerRepository;
 import com.issa.poc.security.JwtUtil;
 import com.issa.poc.security.MyUserDetailsService;
@@ -21,9 +20,6 @@ public class AuthController {
 
     @Autowired
     private MyUserDetailsService userDetailsService;
-
-    @Autowired
-    private CustomerRepository customerRepository;
 
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password) {

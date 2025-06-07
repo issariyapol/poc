@@ -63,9 +63,7 @@ public class TransactionServiceTest {
             assertEquals(returnAccount, senderAccount);
 
             verify(transactionRepository, times(4)).save(any(Transaction.class));
-        } catch (AccountNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (TransInsufficientFundException e) {
+        } catch (AccountNotFoundException | TransInsufficientFundException e) {
             throw new RuntimeException(e);
         }
     }

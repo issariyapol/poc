@@ -4,8 +4,8 @@ import com.issa.poc.exception.AccountNotFoundException;
 
 public class TransErrResMsg extends BaseResMsg {
     public TransErrResMsg(AccountNotFoundException e) {
-        this.setStatusCode(e.STATUS_CODE);
-        this.setDescription(e.DESCRIPTION);
+        this.setStatusCode(AccountNotFoundException.STATUS_CODE);
+        this.setDescription(AccountNotFoundException.DESCRIPTION);
     }
 
     public TransErrResMsg(String number, String message) {

@@ -84,7 +84,7 @@ public class AccountService {
 
         Statement statement = new Statement();
         statement.setBalance(account.get().getBalance());
-        statement.setValueAsOf(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/YYYY HH:mm:ss" )));
+        statement.setValueAsOf(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss" )));
 
         final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm:ss");
         LocalDateTime fromDateTime = LocalDateTime.parse(from+" 00:00:00",format);
@@ -98,7 +98,7 @@ public class AccountService {
         ArrayList<StatementRecord> records = new ArrayList<>();
         for (Transaction tran : transactions){
             StatementRecord record = new StatementRecord();
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/YY");
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yy");
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
             String date = tran.getTransactionDateTime().format(dateFormatter);

@@ -1,6 +1,5 @@
 package com.issa.poc.model;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Statement {

@@ -12,7 +12,6 @@ import com.issa.poc.msg.AcctReqMsg;
 import com.issa.poc.msg.AcctOkResMsg;
 import com.issa.poc.msg.BaseResMsg;
 import com.issa.poc.repository.CustomerRepository;
-import com.issa.poc.security.JwtUtil;
 import com.issa.poc.security.MyUserDetailsService;
 import com.issa.poc.service.AccountService;
 import com.issa.poc.exception.DepositAmountLessThanOneException;
@@ -20,8 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -42,9 +39,9 @@ public class AccountController {
             Account account = accountService.addNewAccount(requestMsg.getCid(), requestMsg.getThaiName(), requestMsg.getEngName(), requestMsg.getTellerId());
             return ResponseEntity.status(HttpStatus.OK).body(new AcctOkResMsg("Create Account Successful", account));
         } catch (CustomerNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AcctErrResMsg(e.STATUS_CODE, e.DESCRIPTION));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AcctErrResMsg(CustomerNotFoundException.STATUS_CODE, CustomerNotFoundException.DESCRIPTION));
         } catch (AccountInvalidCustomerNameException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AcctErrResMsg(e.STATUS_CODE, e.DESCRIPTION));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AcctErrResMsg(AccountInvalidCustomerNameException.STATUS_CODE, AccountInvalidCustomerNameException.DESCRIPTION));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new AcctErrResMsg("500", e.getMessage()));
         }
@@ -57,11 +54,11 @@ public class AccountController {
                     requestMsg.getEngName(), requestMsg.getDepositAmount(), requestMsg.getTellerId(), requestMsg.getTerminalId());
             return ResponseEntity.status(HttpStatus.OK).body(new AcctOkResMsg("Create Account Successful", account));
         } catch (CustomerNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AcctErrResMsg(e.STATUS_CODE, e.DESCRIPTION));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AcctErrResMsg(CustomerNotFoundException.STATUS_CODE, CustomerNotFoundException.DESCRIPTION));
         } catch (AccountInvalidCustomerNameException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AcctErrResMsg(e.STATUS_CODE, e.DESCRIPTION));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AcctErrResMsg(AccountInvalidCustomerNameException.STATUS_CODE, AccountInvalidCustomerNameException.DESCRIPTION));
         } catch (DepositAmountLessThanOneException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AcctErrResMsg(e.STATUS_CODE, e.DESCRIPTION));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AcctErrResMsg(DepositAmountLessThanOneException.STATUS_CODE, DepositAmountLessThanOneException.DESCRIPTION));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new AcctErrResMsg("500", e.getMessage()));
         }
@@ -79,7 +76,7 @@ public class AccountController {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
             }
         } catch (AccountNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AcctErrResMsg(e.STATUS_CODE, e.DESCRIPTION));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new AcctErrResMsg(AccountNotFoundException.STATUS_CODE, AccountNotFoundException.DESCRIPTION));
         }
     }
 
@@ -106,18 +103,23 @@ public class AccountController {
         String year = yearMonth.substring(0, 4);
         String month = yearMonth.substring(4, 6);
 
-        if (month.equals("01") || month.equals("03") || month.equals("05") || month.equals("07") || month.equals("08") || month.equals("12")) {
-            return yearMonth + "31";
-        } else if (month.equals("04") || month.equals("06") || month.equals("09") || month.equals("11")) {
-            return yearMonth + "30";
-        } else if (month.equals("02")){
-            if(Integer.parseInt(year)%4==0) {
-                return yearMonth + "29";
-            } else {
-                return yearMonth + "28";
+        switch (month) {
+            case "01", "03", "05", "07", "08", "12" -> {
+                return yearMonth + "31";
             }
-        } else {
-            return "";
+            case "04", "06", "09", "11" -> {
+                return yearMonth + "30";
+            }
+            case "02" -> {
+                if (Integer.parseInt(year) % 4 == 0) {
+                    return yearMonth + "29";
+                } else {
+                    return yearMonth + "28";
+                }
+            }
+            default -> {
+                return "";
+            }
         }
     }
 }

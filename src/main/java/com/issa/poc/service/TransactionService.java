@@ -72,7 +72,7 @@ public class TransactionService {
     }
 
     @Transactional
-    public Account withdraw(Account account, Double amount, String terminalId, String tellerId) throws Exception, TransInsufficientFundException {
+    public Account withdraw(Account account, Double amount, String terminalId, String tellerId) throws TransInsufficientFundException {
         double currentBalance = account.getBalance();
 
         if (currentBalance < amount) {
@@ -120,6 +120,7 @@ public class TransactionService {
         drTrans.setChannel("ATS");
         drTrans.setSide("CR");
         drTrans.setAmount(amount);
+        drTrans.setTerminalId(terminalId);
         drTrans.setBalance(newFromAccountBalance);
         drTrans.setRemark("Transfer to x" + toAccount.get().getAccountNumber().substring(4, 7) + " " + toAccount.get().getCustomer().getEngName());
         drTrans.setTransactionDateTime(LocalDateTime.now());
@@ -135,6 +136,7 @@ public class TransactionService {
         crTrans.setChannel("ATS");
         crTrans.setSide("DR");
         crTrans.setAmount(amount);
+        crTrans.setTerminalId(terminalId);
         crTrans.setBalance(newToAccountBalance);
         crTrans.setRemark("Receive from x" + fromAccount.get().getAccountNumber().substring(4, 7) + " " + fromAccount.get().getCustomer().getEngName());
         crTrans.setTransactionDateTime(LocalDateTime.now());

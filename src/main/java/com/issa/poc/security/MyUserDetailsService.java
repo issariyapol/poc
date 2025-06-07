@@ -29,8 +29,8 @@ public class MyUserDetailsService implements UserDetailsService {
     public Customer getCustomerFromAuthHeader(String authHeader){
         String token = authHeader.substring(7);
         String email = jwtUtil.extractUsername(token);
-
-        return customerRepository.findByEmail(email).get();
+        Optional<Customer> customer = customerRepository.findByEmail(email);
+        return customer.orElse(null);
     }
 }
 
